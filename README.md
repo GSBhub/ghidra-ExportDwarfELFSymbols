@@ -1,10 +1,10 @@
 # ghidra-ExportDwarfELFSymbols
-A format agnostic script to export an ELF file with DWARF symbols from a Ghidra program
+A format agnostic .jar plugin for Ghidra which exports an ELF file with DWARF symbols from a Ghidra program
 
-This script was heavilly inspired by CeSeNA's [ghidra2dwarf](https://github.com/cesena/ghidra2dwarf) script, but the main difference is their script append informations to an existing ELF while this script is to generate a new one from scratch and figure out the proper format.
+This project was heavilly inspired by CeSeNA's [ghidra2dwarf](https://github.com/cesena/ghidra2dwarf) script, and built from aldelaro5's original script [here](https://github.com/aldelaro5/ghidra-ExportDwarfELFSymbols). This plugin generates an .elf binary from the target Ghidra database, exporting symbols to create a target-specific .elf with limited debug symbols.
 
 ## Motivations
-This script was made because there currently isn't a good way to work with relatively esotheric debugging targets for ghidra (like console emulators) while being able to have symbols, but also have access to debugging features such as `nexti` (step over). The `nexti` command has trouble to works on these targets (it would act as a `stepi`) because GDB doesn't have enough informations to unwind the stack and after research, it was found that giving minimal symbols to GDB (mainly where functions are) is enough for it to figure out how to decide that a new stack frame was entered
+This script was made because there currently isn't a good way to work with relatively esotheric debugging targets for ghidra (like console emulators/flat binaries) while being able to have symbols. This is important if you are using a debugger like GDB (especially if using GDB's backend in ghidra), which generally require symbols to identify function stack depth, memory regions, etc. 
 
 ## Features
 This script was made to generate the ELF from scratch: it doesn't care how the program is formatted, it simply spit DWARF informations from what Ghidra knows.
@@ -36,6 +36,8 @@ Build the packaged .jar file using gradle build command.
 Ghidra comes with a gradle wrapper under `support/gradle/gradlew` that should work. 
 
 You may need to set the environment variable `GHIDRA_INSTALL_DIR` before running.
+
+You can build the required `libdwarf.so` using the gradle "buildLibdwarf" task. This will generate a native libdwarf.so (or libdwarf.dll) package for your host machine. At present, this needs to be manually moved (after the build step) to `src/main/resources` so it can be packaged in the final .jar that is used with Ghidra.
 
 The gradle rules built into Ghidra have tasks for building distributible versions of the binaries, which I will write about here once I remember how to do it.
 
