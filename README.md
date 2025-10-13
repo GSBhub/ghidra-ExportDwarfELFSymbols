@@ -31,13 +31,18 @@ Currently, only the names, entry points and the ends address of functions are ex
 If Ghidra complains about not being able to find a library at step 2, make sure you performed the second step of the installation instructions correctly (it is required for Ghidra to be aware of the existence of the .jar file).
 
 ## Building instructions
-> Note, if you just want to use the script, you do not need to do this, this section is for developers
+Build the packaged .jar file using gradle build command. 
 
-First, build the jar file containing the different versions of libdwarf by running the `libdwarf/build.sh` script (this will download the libraries if they aren't present). After that, you should have a `libdwarf.jar` in the `libdwarf/targets` folder.
+Ghidra comes with a gradle wrapper under `support/gradle/gradlew` that should work. 
 
-Next, setup a ghidra script project as you would normally to the root directory of the repository. You will need to add both JNA's jar as well as `libdwarf.jar` to your build path (in Eclipse, you can do this by right clciking on Refferenced Librairies then Build Path -> Configure Build Path...). To get the JNA's jars, download them from the [JNA repo](https://github.com/java-native-access/jna) by following the links in the README.
+You may need to set the environment variable `GHIDRA_INSTALL_DIR` before running.
 
-Once done, the script should build and run sucessfully after launching Ghidra from there.
+The gradle rules built into Ghidra have tasks for building distributible versions of the binaries, which I will write about here once I remember how to do it.
+
+
+## TBD:
+Next goal is to use the CMake builds in the `build.gradle` project to properly move the built libdwarf.so to the `src/main/resources` directory so Gradle/Maven package it within the built .jar. That will probably require me forking the base libdwarf-ghidra2dwarf project to do, since the base CMakeLists.txt doesn't really have any good ways for me to do that and I don't want to write a bash script.
+
 
 ## License
 This script is licensed under the MIT license which grants you the rights to share, modify and distribute this script as long as you mention the original author. For more details, please consult the LICENSE file.
