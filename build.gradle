@@ -39,7 +39,8 @@ else if (project.hasProperty("GHIDRA_INSTALL_DIR")) {
 	ghidraInstallDir = project.getProperty("GHIDRA_INSTALL_DIR")
 }
 else {
-	ghidraInstallDir = "/home/scotty/Documents/ghidra_11.4.2_PUBLIC"
+    // error
+	ghidraInstallDir = ""
 }
 
 task distributeExtension {

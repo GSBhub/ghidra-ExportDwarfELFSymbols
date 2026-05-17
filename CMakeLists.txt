@@ -14,8 +14,12 @@ elseif(UNIX)
     set(SHARED_LIB_FILENAME "libdwarf.so")
 endif()
 
-set(GHIDRA_INSTALL_DIR "/home/scotty/Documents/ghidra_11.4.2_PUBLIC"
-    CACHE PATH "Path to the Ghidra installation directory")
+# Force user to set the path, don't default to it because
+# iirc everone puts ghidra somewhere weird
+# could probably use the kali default path if I wanted to, but I don't
+if(GHIDRA_INSTALL_DIR STREQUAL "")
+    message(ERROR, "Set GHIDRA_INSTALL_DIR to build!")
+endif()
 
 option(BUILD_SHARED "Build shared library" ON)
 option(BUILD_NON_SHARED "Build static library" OFF)
