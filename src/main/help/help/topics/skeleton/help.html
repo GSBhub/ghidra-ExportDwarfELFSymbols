@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<HTML>
+  <HEAD>
+    <META http-equiv="Content-Language" content="en-us">
+    <META http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <TITLE>ExportDwarfELFSymbols</TITLE>
+    <LINK rel="stylesheet" type="text/css" href="help/shared/DefaultStyle.css">
+  </HEAD>
+
+  <BODY>
+    <H1><a name="HelpAnchor"></a>ExportDwarfELFSymbols</H1>
+
+    <P>
+      ExportDwarfELFSymbols is a Ghidra script that generates a minimal ELF file containing only
+      DWARF function symbols derived from Ghidra's analysis of a loaded program. The output ELF is
+      intended to be loaded into GDB via the <TT>symbol-file</TT> command to enable proper stack
+      unwinding (<TT>nexti</TT>) on targets with non-standard binary formats, such as console ROMs
+      or emulator GDB stubs.
+    </P>
+
+    <H2>Usage</H2>
+    <OL>
+      <LI>Open a program in Ghidra and ensure it has been analyzed.</LI>
+      <LI>Run the <TT>ExportDwarfELFSymbols</TT> script from the Script Manager.</LI>
+      <LI>When prompted, choose an output file path for the generated ELF.</LI>
+      <LI>Load the resulting ELF into GDB: <TT>(gdb) symbol-file /path/to/output.elf</TT></LI>
+    </OL>
+
+    <H2>What it generates</H2>
+    <P>
+      The output is an <TT>ET_DYN</TT> ELF with no program headers. It contains a single
+      <TT>DW_TAG_compile_unit</TT> with one <TT>DW_TAG_subprogram</TT> DIE per function found in
+      the Ghidra program. Each function DIE carries:
+    </P>
+    <UL>
+      <LI><TT>DW_AT_name</TT> and <TT>DW_AT_linkage_name</TT> — the function name as known to Ghidra</LI>
+      <LI><TT>DW_AT_low_pc</TT> / <TT>DW_AT_high_pc</TT> — the function's address range</LI>
+      <LI><TT>DW_AT_frame_base</TT> using <TT>DW_OP_call_frame_cfa</TT> for stack unwinding</LI>
+    </UL>
+
+    <H2>Supported architectures</H2>
+    <P>
+      The ELF machine type and DWARF ABI are automatically selected from the program's language:
+      ARM, AArch64, PowerPC (32/64), MIPS, x86, and x86-64. Endianness and pointer width are also
+      derived from the program's language descriptor.
+    </P>
+
+    <H2>Prerequisites</H2>
+    <P>
+      The native <TT>libdwarf</TT> shared library must be present in the appropriate
+      <TT>os/&lt;platform&gt;/</TT> directory and that directory must be on Ghidra's plugin path
+      (Edit &rarr; Plugin Path). The library is built via CMake from the bundled
+      <TT>libdwarf/</TT> submodule.
+    </P>
+  </BODY>
+</HTML>

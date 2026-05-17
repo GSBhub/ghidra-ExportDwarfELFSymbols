@@ -1,2 +1,7 @@
-/libdwarf/src/main/resources/
-/libdwarf/target/
+/build/
+/dist/
+/.gradle/
+/os/**/*.so
+/os/**/*.dll
+/os/**/*.dylib
+/test_build/
