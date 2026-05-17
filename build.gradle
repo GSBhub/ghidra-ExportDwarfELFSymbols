@@ -39,8 +39,7 @@ else if (project.hasProperty("GHIDRA_INSTALL_DIR")) {
 	ghidraInstallDir = project.getProperty("GHIDRA_INSTALL_DIR")
 }
 else {
-    // error
-	ghidraInstallDir = ""
+	throw new GradleException("GHIDRA_INSTALL_DIR must be set as an environment variable or Gradle project property (-PGHIDRA_INSTALL_DIR=<path>)")
 }
 
 task distributeExtension {
